@@ -15,16 +15,20 @@ describe("template spec", () => {
     cy.log("keyword eklendi")
     cy.get(".row > .btn").click();
     cy.wait(10000);
+    const handleClientLoad = "";
+    // chatId tanımlama
+    const chatId = -1002023776112;
+
     cy.get(":nth-child(1) > .card > .card-body > :nth-child(2) > .col-4")
       .invoke("text")
       .then((text) => {
-        const chatId = -1002023776112;
         try {
           cy.log(text);
         } catch (error) {
           sendMessageToTelegram(`Hata`, error, chatId);
         }
       });
+
     cy.get(":nth-child(2) > .card > .card-body > :nth-child(2) > .col-4")
       .invoke("text")
       .then((text) => {
@@ -36,3 +40,29 @@ describe("template spec", () => {
       });
   });
 });
+
+function sendMessageToTelegram(message, error, chatId) {
+  const errorMessage = error ? error.message : '';
+  const telegramApiUrl = `https://api.telegram.org/bot6932228424:AAF4BdZDRSTaVWefaDsbNUf5ykm6XRf9BpQ/sendMessage`;
+
+  return fetch(telegramApiUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      chat_id: chatId,
+      text: `${message}\n${errorMessage}`,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP hata: ${response.status}`);
+      }
+
+      console.log('Mesaj başarıyla gönderildi.');
+    })
+    .catch((error) => {
+      console.error('Mesaj gönderme hatası:', error.message);
+    });
+}
