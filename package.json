@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "badges": "your-badge-generation-command-here"
+    "badges": "npx -p dependency-version-badge update-badge cypress cypress-await"
   },
   "keywords": [],
   "author": "",
