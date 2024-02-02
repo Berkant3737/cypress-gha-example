@@ -5,11 +5,14 @@ describe("template spec", () => {
     cy.get("#email").type("test@tubegrow.com");
     cy.get("#password").type("root");
     cy.get("#kt_sign_in_submit").click();
+    cy.log("Giriş Başarılı");
     //Giriş
     cy.wait(2000);
-    cy.visit("https://app.tubegrow.com/#/tools/keyword-search");
-    cy.wait(10000);
+    cy.get(':nth-child(4) > .menu-link > .menu-icon > .ki-duotone').click()
+    cy.wait(4000);
+    cy.log("Keyword search sayfasına yönlendirildi");
     cy.get("#keyword_new").type("makyaj");
+    cy.log("keyword eklendi")
     cy.get(".row > .btn").click();
     cy.wait(10000);
     cy.get(":nth-child(1) > .card > .card-body > :nth-child(2) > .col-4")
