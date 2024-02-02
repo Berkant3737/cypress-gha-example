@@ -36,6 +36,9 @@ describe('template spec', () => {
   function sendMessageToTelegram(message, chatId) {
     const telegramApiUrl = `https://api.telegram.org/bot6932228424:AAF4BdZDRSTaVWefaDsbNUf5ykm6XRf9BpQ/sendMessage`;
   
+    // Bu noktada console.log ile bir kontrol yapabilirsiniz
+    console.log('Fonksiyon çalıştı. Mesaj:', message, 'Chat ID:', chatId);
+  
     return fetch(telegramApiUrl, {
       method: 'POST',
       headers: {
