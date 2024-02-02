@@ -7,9 +7,6 @@ describe('template spec', () => {
   
       cy.visit('https://app.tubegrow.com/#/tools/video-inspiration');
   
-      // Sayfanın tam yüklendiğinden emin olun
-      cy.get('#someElementOnThePage').should('exist');
-  
       // API isteğini yap
       cy.get('#keyword_new').should('exist').type('makyaj')
         .get('.row > .btn').click();
@@ -25,7 +22,12 @@ describe('template spec', () => {
         if (interception.response.statusCode === 200) {
           cy.log('Datalar geldi');
         } else {
-          sendMessageToTelegram('Datalar gelmedi', chatId);
+          // Hata durumunda Telegram'a mesaj gönder
+          const errorMessage = 'Datalar gelmedi';
+          sendMessageToTelegram(errorMessage, chatId);
+  
+          // Cypress testini başarısız yap
+          throw new Error(errorMessage);
         }
       });
     });
