@@ -1,8 +1,5 @@
 name: End-to-end tests
-on:
-  push:
-  schedule:
-    - cron: '*/5 * * * *'  # Her 5 dakikada bir çalıştır
+on: push
 
 jobs:
   cypress-run:
