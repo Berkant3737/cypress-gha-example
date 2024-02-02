@@ -7,8 +7,11 @@ describe('template spec', () => {
   
       cy.visit('https://app.tubegrow.com/#/tools/video-inspiration');
   
+      // Sayfanın tam yüklendiğinden emin olun
+      cy.get('#someElementOnThePage').should('exist');
+  
       // API isteğini yap
-      cy.get('#keyword_new').type('makyaj')
+      cy.get('#keyword_new').should('exist').type('makyaj')
         .get('.row > .btn').click();
   
       cy.intercept({
