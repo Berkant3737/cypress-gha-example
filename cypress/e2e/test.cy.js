@@ -1,63 +1,37 @@
 describe('template spec', () => {
     it('passes', () => {
+      //Giriş
       cy.visit('https://app.tubegrow.com/#/sign-in')
-        .get('#email').type('test@tubegrow.com')
-        .get('#password').type('root')
-        .get('#kt_sign_in_submit').click();
-  
-      cy.visit('https://app.tubegrow.com/#/tools/video-inspiration');
-  
-      // API isteğini yap
-      cy.get('#keyword_new').should('exist').type('makyaj')
-        .get('.row > .btn').click();
-  
-      cy.intercept({
-        method: 'GET',
-        url: 'https://api.tubegrow.com:3030/api/getengaged/UCkLXELm63_pH7L-r-548kig',
-      }).as('apiRequest');
-  
-      cy.wait('@apiRequest').then((interception) => {
-        const chatId = -1002023776112;
-  
-        if (interception.response.statusCode === 200) {
-          cy.log('Datalar geldi');
-        } else {
-          // Hata durumunda Telegram'a mesaj gönder
-          const errorMessage = 'Datalar gelmedi';
-          sendMessageToTelegram(errorMessage, chatId);
-  
-          // Cypress testini başarısız yap
-          throw new Error(errorMessage);
-        }
-      });
-    });
-  });
-  
-  function sendMessageToTelegram(message, chatId) {
-    const telegramApiUrl = `https://api.telegram.org/bot6932228424:AAF4BdZDRSTaVWefaDsbNUf5ykm6XRf9BpQ/sendMessage`;
-  
-    // Bu noktada console.log ile bir kontrol yapabilirsiniz
-    console.log('Fonksiyon çalıştı. Mesaj:', message, 'Chat ID:', chatId);
-  
-    return fetch(telegramApiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: message,
-      }),
+      cy.get('#email').type('test@tubegrow.com')
+      cy.get('#password').type('root')
+      cy.get('#kt_sign_in_submit').click()
+      //Giriş
+      cy.wait(2000)
+      cy.visit('https://app.tubegrow.com/#/tools/keyword-search')
+      cy.wait(2000)
+      cy.get('#keyword_new').type('makyaj')
+      cy.get('.row > .btn').click()
+      cy.wait(10000)
+      cy.get(':nth-child(1) > .card > .card-body > :nth-child(2) > .col-4')
+        .invoke('text')
+        .then((text) => {
+          const chatId = -1002023776112
+          try {
+            cy.log( text)
+          } catch (error) {
+            sendMessageToTelegram(`Hata`,error, chatId)
+          }
+        })
+      cy.get(':nth-child(2) > .card > .card-body > :nth-child(2) > .col-4')
+        .invoke('text')
+        .then((text) => {
+          try {
+            cy.log('Makyaj', text)
+          } catch (error) {
+            sendMessageToTelegram(`Hata`,error, chatId)
+          }
+        })
+        
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP hata: ${response.status}`);
-        }
-  
-        console.log('Mesaj başarıyla gönderildi.');
-      })
-      .catch((error) => {
-        console.error('Mesaj gönderme hatası:', error.message);
-      });
-  }
+  })
   
