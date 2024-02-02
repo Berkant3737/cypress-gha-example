@@ -1,0 +1,36 @@
+name: badges
+
+on:
+  schedule:
+    # Update badges every 2 minutes
+    - cron: '*/20 * * * *'
+
+jobs:
+  badges:
+    name: Badges
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v4
+
+      - name: Log Before Update version badges 🏷
+        run: echo "Before npm run badges"
+
+      - name: Update version badges 🏷
+        run: npm run badges
+
+      - name: Log After Update version badges 🏷
+        run: echo "After npm run badges"
+
+      - name: Run Cypress tests 🚀
+        uses: cypress-io/github-action@v2
+        with:
+          record: true
+          key: ${{ secrets.CYPRESS_RECORD_KEY }}
+
+      - name: Commit any changed files 💾
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Updated badges and ran Cypress tests
+          branch: main
+          file_pattern: README.md
