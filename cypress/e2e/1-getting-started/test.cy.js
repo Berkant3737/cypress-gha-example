@@ -8,7 +8,7 @@ describe('template spec', () => {
       //Giriş
       cy.wait(2000)
       cy.visit('https://app.tubegrow.com/#/tools/keyword-search')
-      cy.wait(4000)
+      cy.wait(10000)
       cy.get('#keyword_new').type('makyaj')
       cy.get('.row > .btn').click()
       cy.wait(10000)
